@@ -15,4 +15,27 @@ class Module
     {
         return include __DIR__ . '/../config/module.config.php';
     }
+   
+     public function getAutoloaderConfig()
+    {
+        return array(
+            'Zend\Loader\StandardAutoloader' => array(
+                'namespaces' => array(
+                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
+                ),
+            ),
+        );
+    }
+
+    //controllerに関する設定(初期化など)を記入する
+    public function getControllerConfig()
+    {
+        return [
+            'factories' =>[
+	        // Controller\MemoController::class => InvokableFactory::class,
+                //複数コントローラならここに追加
+                Controller\TestController::class => InvokableFactory::class,
+            ]
+	];
+    }
 }

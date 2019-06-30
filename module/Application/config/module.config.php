@@ -9,9 +9,13 @@ namespace Application;
 
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
+use Zend\Router\Http\Regex;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
+var_dump("module/Application/config/module.config.php");
+
 return [
+    //ルーティングの設定
     'router' => [
         'routes' => [
             'home' => [
@@ -24,7 +28,27 @@ return [
                     ],
                 ],
             ],
+            'test' => [
+               'type'    => Segment::class,
+               'options' => [
+                   'route'    => '/test[/:action]',
+                   'defaults' => [
+                      'controller' => Controller\TestController::class,
+                      'action'     => 'index',
+                   ],
+               ],
+            ],
             'application' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/application[/:action]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+            'login' => [
                 'type'    => Segment::class,
                 'options' => [
                     'route'    => '/application[/:action]',
@@ -36,11 +60,14 @@ return [
             ],
         ],
     ],
+    // コントローラー追加した分だけ追加
     'controllers' => [
         'factories' => [
             Controller\IndexController::class => InvokableFactory::class,
+            ControllerTestController::class => InvokableFactory::class,
         ],
     ],
+    // エラー画面の設定や、ビュー全般の設定を行う
     'view_manager' => [
         'display_not_found_reason' => true,
         'display_exceptions'       => true,
@@ -52,6 +79,7 @@ return [
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
+            'application/test/index'  => __DIR__ . '/../view/application/test/index.phtml',
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',
